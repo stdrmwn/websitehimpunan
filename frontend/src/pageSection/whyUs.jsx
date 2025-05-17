@@ -8,6 +8,7 @@ export default function AchievementStats() {
   const [kabinet, setKabinet] = useState(null);
   const [achievements, setAchievements] = useState([]);
   const [informasi, setInformasi] = useState([]);
+  const [eventList, setEventList] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,8 +24,13 @@ export default function AchievementStats() {
 
     axios
       .get("http://localhost/WEBSITEHIMPUNAN/backend/get_artikell.php")
-      .then((res) => setInformasi(res.data.slice(0, 4))) // ambil 4 informasi teratas
+      .then((res) => setInformasi(res.data.slice(0, 4)))
       .catch((err) => console.error("Gagal fetch informasi:", err));
+
+    axios
+      .get("http://localhost/WEBSITEHIMPUNAN/backend/get_eventshimpunan.php")
+      .then((res) => setEventList(res.data.slice(0, 3))) // ambil 3 event terbaru
+      .catch((err) => console.error("Gagal fetch event:", err));
   }, []);
 
   return (
@@ -68,7 +74,6 @@ export default function AchievementStats() {
             ))}
           </div>
 
-          {/* Logo Kabinet */}
           {kabinet?.logo ? (
             <motion.img
               src={`http://localhost/WEBSITEHIMPUNAN/backend/uploads/${kabinet.logo}`}
@@ -108,7 +113,7 @@ export default function AchievementStats() {
 
           <motion.button
             onClick={() => navigate("/divisi")}
-            className="mt-8 px-12 py-4 w-[320px] text-[#660033] text-base md:text-lg font-semibold border-2 border-[#660033] bg-transparent hover:bg-[#660033] hover:text-white transition-all duration-300 rounded-md active:shadow-[0_0_15px_3px_#660033] focus:outline-none whitespace-nowrap"
+            className="mt-8 px-12 py-4 w-[320px] text-[#660033] text-base md:text-lg font-semibold border-2 border-[#660033] bg-transparent hover:bg-[#660033] hover:text-white transition-all duration-300 rounded-md active:shadow-[0_0_15px_3px_#660033] focus:outline-none"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             initial={{ opacity: 0, y: 20 }}
@@ -118,6 +123,68 @@ export default function AchievementStats() {
           >
             Kenali Kepengurusan
           </motion.button>
+        </div>
+      </motion.div>
+
+      {/* Section Event Himpunan */}
+      <motion.div
+        className="bg-white py-20 px-[8%]"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 1 }}
+      >
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-[#800040]">
+          Event Himpunan
+        </h2>
+        <p className="text-lg text-gray-700 mt-3 text-center mb-6">
+          Berbagai Kegiatan Menarik dari Himpunan Mahasiswa
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {eventList.map((item, index) => (
+            <motion.div
+              key={index}
+              className="group bg-white rounded-xl shadow-lg overflow-hidden flex flex-col cursor-pointer transition-transform transform hover:scale-[1.03] hover:shadow-xl"
+              onClick={() => navigate(`/events/${item.slug}`)}
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.3 }}
+            >
+              {item.foto_event && (
+                <img
+                  src={`http://localhost/WEBSITEHIMPUNAN/backend/uploads/${item.foto_event}`}
+                  alt={item.nama_event}
+                  className="h-48 w-full object-cover"
+                />
+              )}
+              <div className="p-5 flex-grow flex flex-col">
+                <h3 className="text-xl font-bold mb-2 text-[#7A2048]">
+                  {item.nama_event}
+                </h3>
+                <div
+                  className="text-gray-700 text-sm flex-grow"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      item.deskripsi_event.length > 120
+                        ? item.deskripsi_event.substring(0, 120) + "..."
+                        : item.deskripsi_event,
+                  }}
+                />
+                <p className="text-xs text-gray-500 mt-2">
+                  {new Date(item.tanggal_event).toLocaleDateString("id-ID")}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="flex justify-center mt-12">
+          <button
+            onClick={() => navigate("/eventshimpunan")}
+            className="mt-8 px-12 py-4 w-[250px] md:w-[300px] text-[#660033] text-lg md:text-xl font-semibold border-2 border-[#660033] bg-transparent hover:bg-[#660033] hover:text-white transition-all duration-300 rounded-md active:shadow-[0_0_15px_3px_#660033] focus:outline-none"
+          >
+            Lihat Semua Event
+          </button>
         </div>
       </motion.div>
 

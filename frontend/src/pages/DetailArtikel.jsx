@@ -92,21 +92,19 @@ const DetailArtikel = () => {
             </span>
           )}
 
-          <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-            <h1 className="text-3xl font-bold text-[#7A1E5D] mb-2 md:mb-0">
-              {artikel.judul}
-            </h1>
-            <p className="text-sm text-gray-500">
-              {new Date(artikel.tanggal_input).toLocaleDateString("id-ID", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })}
-            </p>
-          </div>
+          <h1 className="text-3xl font-bold text-[#7A1E5D] mb-1">
+            {artikel.judul}
+          </h1>
+          <p className="text-sm text-gray-500 mb-6">
+            {new Date(artikel.tanggal_input).toLocaleDateString("id-ID", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}
+          </p>
 
           <div
-            className="mt-6 text-gray-800 leading-relaxed"
+            className="text-gray-800 leading-relaxed"
             dangerouslySetInnerHTML={{ __html: artikel.informasi }}
           />
         </div>
@@ -122,16 +120,16 @@ const DetailArtikel = () => {
                   key={item.slug}
                   className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition bg-white hover:bg-[#fef7fb] group"
                 >
-                  <p className="text-xs text-[#7A1E5D] font-semibold mb-1">
+                  <h3 className="text-md font-bold text-gray-800 mb-1 group-hover:text-[#7A1E5D] transition duration-200">
+                    {item.judul}
+                  </h3>
+                  <p className="text-sm text-gray-500 mb-2">
                     {new Date(item.tanggal_input).toLocaleDateString("id-ID", {
                       day: "numeric",
                       month: "short",
                       year: "numeric",
                     })}
                   </p>
-                  <h3 className="text-md font-bold text-gray-800 mb-1 group-hover:text-[#7A1E5D] transition duration-200">
-                    {item.judul}
-                  </h3>
                   <p className="text-sm text-gray-600 line-clamp-2">
                     {item.informasi.replace(/<[^>]+>/g, "").slice(0, 100)}...
                   </p>

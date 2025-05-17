@@ -259,6 +259,7 @@ if (isset($_POST["editArticle"])) {
       <a href="inputvisimisi.php"><i class="bi bi-bullseye"></i> Visi Misi</a>
       <a href="indexkabinet.php"><i class="bi bi-people-fill"></i> Profil Kabinet</a>
       <a href="indexevents.php"><i class="bi bi-calendar-event"></i> Our Events</a>
+        <a href="indexeventhimpunan.php"><i class="bi bi-calendar2-event"></i> Event Himpunan</a>
       <a href="indexdivisi.php"><i class="bi bi-diagram-3-fill"></i> Divisi Himpunan</a>
       <a href="indexgallery.php"><i class="bi bi-images"></i> Gallery of Events</a>
       <a href="indexachievement.php"><i class="bi bi-award-fill"></i> Pencapaian</a>

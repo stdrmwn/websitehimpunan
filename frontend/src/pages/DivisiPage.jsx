@@ -63,7 +63,7 @@ export default function DivisiPage() {
     );
 
   return (
-    <div className="bg-white text-[#3C2A21] font-sans min-h-screen">
+    <div className="bg-white text-[#3C2A21] font min-h-screen">
       <NavbarWhite />
 
       <section className="pt-28 px-4 text-center">
