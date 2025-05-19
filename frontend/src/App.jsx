@@ -10,7 +10,6 @@ import Homepage from "./pages/Homepage.jsx";
 import InformasiPage from './pages/Informasi.jsx';
 import LoginPage from "./pages/Loginpage.jsx";
 import MainEvents from "./pages/MainEvents.jsx";
-import Signup from "./pages/signUp.jsx";
 import VisionMissionPage from './pages/VisionMissionpage.jsx';
 import WebsiteProdi from "./pages/WebsiteProdi";
 
@@ -26,7 +25,6 @@ function App() {
       <Route path="/events" element={<MainEvents />} /> 
       <Route path="/contact" element={<ContactPage />} /> 
       <Route path="/informasi" element={<InformasiPage />} /> 
-      <Route path="/signup" element={<Signup />} /> 
       <Route path="/dashboardBackend" element={<DashboardBackend />} /> 
               <Route path="/informasi/:slug" element={<DetailArtikel />} />
               <Route path="/prodi" element={<WebsiteProdi />} />

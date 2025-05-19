@@ -34,11 +34,11 @@ export default function Footer() {
         <div className="md:col-span-1">
           <h3 className="text-lg font-bold mb-4">Navigasi</h3>
           <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:underline hover:text-gray-200 transition">Beranda</a></li>
-            <li><a href="#whyUs" className="hover:underline hover:text-gray-200 transition">Tentang Kami</a></li>
-            <li><a href="#" className="hover:underline hover:text-gray-200 transition">Informasi</a></li>
-            <li><a href="#faq" className="hover:underline hover:text-gray-200 transition">FAQ</a></li>
-            <li><a href="#" className="hover:underline hover:text-gray-200 transition">Kontak</a></li>
+            <li><a href="/" className="hover:underline hover:text-gray-200 transition">Beranda</a></li>
+            <li><a href="/visimisi" className="hover:underline hover:text-gray-200 transition">Tentang Kami</a></li>
+            <li><a href="/informasi" className="hover:underline hover:text-gray-200 transition">Informasi</a></li>
+            <li><a href="/faq" className="hover:underline hover:text-gray-200 transition">FAQ</a></li>
+            <li><a href="/contact" className="hover:underline hover:text-gray-200 transition">Kontak</a></li>
             <li>  <Link to="/prodi" className="hover:underline hover:text-gray-200 transition">
     Website Prodi
   </Link></li>

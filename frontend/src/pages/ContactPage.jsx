@@ -44,6 +44,8 @@ const ContactPage = () => {
   const totalPages = Math.ceil(mediaPartners.length / itemsPerPage);
   const [direction, setDirection] = useState(0);
   const autoSlideRef = useRef(null);
+   const formRef = useRef();
+  const [success, setSuccess] = useState(false);
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -67,6 +69,32 @@ const ContactPage = () => {
     setDirection(1);
     setCurrentPage((prev) => (prev + 1) % totalPages);
     resetAutoSlide();
+  };
+
+    const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = formRef.current;
+
+    fetch("https://formsubmit.co/ajax/himsi@pradita.ac.id", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        name: form.user_name.value,
+        email: form.user_email.value,
+        message: form.message.value,
+      }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          form.reset();
+          setSuccess(true);
+          setTimeout(() => setSuccess(false), 3000); // popup hilang setelah 3 detik
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   const paginatedPartners = mediaPartners.slice(
@@ -124,11 +152,11 @@ const ContactPage = () => {
   }, {
     icon: <FaLinkedin className="text-blue-700 text-2xl" />,
     text: "@himsi.pradita",
-    link: "https://www.linkedin.com/in/himsi-pradita",
+    link: "https://www.linkedin.com/school/pradita-university",
   }, {
     icon: <FaWhatsapp className="text-green-500 text-2xl" />,
     text: "@himsi.pradita",
-    link: "https://wa.me/6285933235262?text=Hai,%20saya%20mau%20bertanya%20terkait%20himpunan.",
+    link: "https://wa.me/6281513009999?text=Hai%2C%20saya%20mau%20bekerjasama%20dengan%20Himpunan%20Mahasiswa%20Sistem%20Informasi%20Universitas%20Pradita.%20Apakah%20boleh%20tolong%20disambungkan%20ke%20pihak%20himpunan%3F",
   }, {
     icon: <FaYoutube className="text-red-600 text-2xl" />,
     text: "@himsi.pradita",
@@ -200,65 +228,72 @@ const ContactPage = () => {
         </motion.div>
 
         {/* Formulir */}
-{/* Formulir */}
-<motion.div
-  className="mt-20 text-center"
-  initial={{ opacity: 0, y: 30 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.6, delay: 0.3 }}
->
-  <h2 className="text-3xl font-bold text-[#861B58] mb-4">Kirim Pesan Langsung</h2>
-  <p className="mt-2 text-lg text-gray-600">Isi formulir di bawah untuk menghubungi kami via email</p>
-</motion.div>
+      {/* Judul */}
+      <motion.div
+        className="mt-20 text-center"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+      >
+        <h2 className="text-3xl font-bold text-[#861B58] mb-4">Kirim Pesan Langsung</h2>
+        <p className="mt-2 text-lg text-gray-600">
+          Isi formulir di bawah untuk menghubungi kami via email
+        </p>
+      </motion.div>
 
-<motion.form
-  ref={form}
-  onSubmit={sendEmail}
-  className="max-w-2xl mx-auto mt-10 space-y-6 bg-white p-6 rounded-xl shadow-lg"
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ duration: 0.6, delay: 0.5 }}
->
-  <div className="relative">
-    <FaUser className="absolute top-4 left-3 text-gray-400" />
-    <input
-      type="text"
-      name="user_name"
-      required
-      placeholder="Nama"
-      className="w-full pl-10 border border-gray-200 p-3 rounded-md outline-none transition duration-200 ease-in-out focus:ring-2 focus:ring-[#861B58] focus:border-[#861B58]"
-    />
-  </div>
-  <div className="relative">
-    <FaEnvelope className="absolute top-4 left-3 text-gray-400" />
-    <input
-      type="email"
-      name="user_email"
-      required
-      placeholder="Email"
-      className="w-full pl-10 border border-gray-200 p-3 rounded-md outline-none transition duration-200 ease-in-out focus:ring-2 focus:ring-[#861B58] focus:border-[#861B58]"
-    />
-  </div>
-  <div className="relative">
-    <FaRegCommentDots className="absolute top-4 left-3 text-gray-400" />
-    <textarea
-      name="message"
-      rows="5"
-      required
-      placeholder="Keperluan / Pertanyaan"
-      className="w-full pl-10 border border-gray-200 p-3 rounded-md outline-none transition duration-200 ease-in-out focus:ring-2 focus:ring-[#861B58] focus:border-[#861B58]"
-    />
-  </div>
-  <div className="text-center">
-    <button
-      type="submit"
-      className="bg-[#861B58] text-white px-8 py-3 rounded-lg hover:bg-[#861B58] transition shadow-md hover:shadow-lg"
-    >
-      Kirim Pesan
-    </button>
-  </div>
-</motion.form>
-
+      {/* Formulir */}
+      <motion.form
+        ref={formRef}
+        onSubmit={handleSubmit}
+        className="max-w-2xl mx-auto mt-10 space-y-6 bg-white p-6 rounded-xl shadow-lg"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+      >
+        <div className="relative">
+          <FaUser className="absolute top-4 left-3 text-gray-400" />
+          <input
+            type="text"
+            name="user_name"
+            required
+            placeholder="Nama"
+            className="w-full pl-10 border border-gray-200 p-3 rounded-md outline-none focus:ring-2 focus:ring-[#861B58]"
+          />
+        </div>
+        <div className="relative">
+          <FaEnvelope className="absolute top-4 left-3 text-gray-400" />
+          <input
+            type="email"
+            name="user_email"
+            required
+            placeholder="Email"
+            className="w-full pl-10 border border-gray-200 p-3 rounded-md outline-none focus:ring-2 focus:ring-[#861B58]"
+          />
+        </div>
+        <div className="relative">
+          <FaRegCommentDots className="absolute top-4 left-3 text-gray-400" />
+          <textarea
+            name="message"
+            rows="5"
+            required
+            placeholder="Keperluan / Pertanyaan"
+            className="w-full pl-10 border border-gray-200 p-3 rounded-md outline-none focus:ring-2 focus:ring-[#861B58]"
+          />
+        </div>
+        <div className="text-center">
+          <button
+            type="submit"
+            className="bg-[#861B58] text-white px-8 py-3 rounded-lg hover:bg-[#6b1446] transition shadow-md hover:shadow-lg"
+          >
+            Kirim Pesan
+          </button>
+        </div>
+        {success && (
+          <div className="text-green-600 text-center font-semibold mt-2">
+            ✅ Pesan berhasil dikirim!
+          </div>
+        )}
+      </motion.form>
       </div>
       <Footer />
     </>
