@@ -53,7 +53,7 @@ export default function FaqPage() {
 
       <section className="min-h-screen px-6 md:px-24 py-20 bg-white">
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-[#7A1E52]">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-[#861B58]">
             Frequently Asked Questions
           </h1>
           <p className="text-lg md:text-xl text-gray-600 mt-4 max-w-2xl mx-auto">

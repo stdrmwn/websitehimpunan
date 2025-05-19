@@ -71,7 +71,7 @@ const InformasiPage = () => {
       <NavbarWhite />
       <main className="flex-grow">
         <section className="text-center pt-32 mb-10 px-4">
-          <h1 className="text-4xl font-extrabold text-[#7A1E5D]">Informasi</h1>
+          <h1 className="text-4xl font-extrabold text-[#861B58]">Informasi Himpunan</h1>
           <p className="text-gray-600 mt-3 text-lg">
             Informasi Terkini Seputar Himpunan Mahasiswa
           </p>
@@ -108,66 +108,69 @@ const InformasiPage = () => {
             ))}
           </div>
 
-          {/* Grid Artikel */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={filterKategori + searchQuery + visibleItems}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+{/* Grid Artikel */}
+<AnimatePresence mode="wait">
+  <motion.div
+    key={filterKategori + searchQuery + visibleItems}
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -10 }}
+    transition={{ duration: 0.3 }}
+    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
+  >
+    {currentItems.length > 0 ? (
+      currentItems.map((item, index) => (
+        <motion.div
+          key={item.id || index}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: index * 0.05 }}
+          className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 group flex flex-col"
+        >
+          <div className="relative overflow-hidden h-52 w-full">
+            <img
+              src={`http://localhost/WEBSITEHIMPUNAN/backend/uploads/${item.foto}`}
+              alt={item.judul}
+              className="h-full w-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+            />
+            <span className="absolute top-3 right-3 bg-white text-[#7A1E5D] text-xs font-semibold px-3 py-1 rounded-md shadow-md border border-[#7A1E5D]">
+              {new Date(item.tanggal_input).toLocaleDateString("id-ID", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              })}
+            </span>
+          </div>
+          <div className="p-5 flex flex-col flex-grow">
+            <h3 className="text-lg font-semibold text-[#7A1E5D] mb-2 leading-snug line-clamp-2">
+              {item.judul}
+            </h3>
+            <div
+              className="text-sm text-gray-700 flex-grow line-clamp-4"
+              dangerouslySetInnerHTML={{
+                __html:
+                  item.informasi.length > 120
+                    ? item.informasi.substring(0, 120) + "..."
+                    : item.informasi,
+              }}
+            />
+            <button
+              onClick={() => navigate(`/informasi/${item.slug}`)}
+              className="mt-4 inline-block bg-[#7A1E5D] text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-[#5a184b] transition-colors self-start"
             >
-              {currentItems.length > 0 ? (
-                currentItems.map((item, index) => (
-                  <motion.div
-                    key={item.id || index}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="bg-white border rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-[500px] overflow-hidden"
-                  >
-                    {item.foto && (
-                      <img
-                        src={`http://localhost/WEBSITEHIMPUNAN/backend/uploads/${item.foto}`}
-                        alt={item.judul}
-                        className="h-52 w-full object-cover"
-                      />
-                    )}
-                    <div className="p-5 flex flex-col flex-grow">
-                      <h3 className="font-semibold text-lg mb-2 text-[#7A1E5D] leading-snug">
-                        {item.judul}
-                      </h3>
-                      <div
-                        className="text-sm text-gray-700 overflow-hidden flex-grow"
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            item.informasi.length > 120
-                              ? item.informasi.substring(0, 120) + "..."
-                              : item.informasi,
-                        }}
-                      />
-                      <p className="text-xs text-gray-500 mt-3">
-                        {new Date(item.tanggal_input).toLocaleDateString(
-                          "id-ID"
-                        )}
-                      </p>
-                      <button
-                        onClick={() => navigate(`/informasi/${item.slug}`)}
-                        className="mt-4 text-sm font-semibold text-[#7A1E5D] hover:underline self-start"
-                      >
-                        Selengkapnya →
-                      </button>
-                    </div>
-                  </motion.div>
-                ))
-              ) : (
-                <p className="col-span-full text-center text-gray-500">
-                  Tidak ada informasi yang sesuai.
-                </p>
-              )}
-            </motion.div>
-          </AnimatePresence>
+              Selengkapnya →
+            </button>
+          </div>
+        </motion.div>
+      ))
+    ) : (
+      <p className="col-span-full text-center text-gray-500">
+        Tidak ada artikel yang sesuai.
+      </p>
+    )}
+  </motion.div>
+</AnimatePresence>
+
 
           {/* Tombol Load More TANPA animasi */}
           {visibleItems < filteredArtikels.length && (

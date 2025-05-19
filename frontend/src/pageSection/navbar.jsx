@@ -66,7 +66,7 @@ export default function Navbar() {
               <img
                 src={Logo}
                 alt="Logo"
-                className="h-[40px] w-auto object-contain"
+                className="h-[56px] w-auto object-contain"
               />
             </a>
           </div>
@@ -159,7 +159,7 @@ export default function Navbar() {
                           to="/events"
                           className="block px-4 py-2 text-[#2889CE] hover:bg-blue-50 rounded-lg"
                         >
-                          Events
+                          Event Utama
                         </Link>
                       </li>
                     </ul>
@@ -287,7 +287,7 @@ export default function Navbar() {
               to="/events"
               className="block px-4 py-3 text-[#2889CE] hover:bg-blue-50 transition-colors duration-200"
             >
-              Events
+              Event Utama
             </Link>
           </li>
         </ul>

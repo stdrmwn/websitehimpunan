@@ -193,7 +193,7 @@ $stmt->close();
 
 <!-- Navbar -->
 <div class="navbar">
-    <h1>Dashboard Super Admin</h1>
+    <h1>Super Admin</h1>
     <div class="profile-container">
         <div class="profile-icon" onclick="toggleDropdown()">
             <?= strtoupper(substr($email, 0, 1)) ?>

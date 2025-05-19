@@ -180,6 +180,7 @@ if (isset($_POST["editEvent"])) {
         <a href="indexgallery.php"><i class="bi bi-images"></i> Gallery of Events</a>
         <a href="indexachievement.php"><i class="bi bi-award-fill"></i> Pencapaian</a>
         <a href="indexartikelfix.php"><i class="bi bi-journal-text"></i> Informasi Artikel</a>
+                <a href="inputhistory.php"><i class="bi bi-clock-history"></i> Our History</a>
         <a href="logout.php" style="color: #ff9999;">
             <i class="bi bi-box-arrow-right"></i> Logout
         </a>

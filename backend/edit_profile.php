@@ -10,17 +10,25 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $success = '';
 $error = '';
+$role = '';
+$plain_password = ''; // akan diisi nanti untuk admin
 
 // Ambil data user
-$stmt = $conn->prepare("SELECT email FROM users WHERE id = ?");
+$stmt = $conn->prepare("SELECT email, role, password FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
-$stmt->bind_result($email);
+$stmt->bind_result($email, $role, $hashed_password);
 $stmt->fetch();
 $stmt->close();
 
-// Proses form
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Hanya admin yang akan mendapatkan password ditampilkan (jika memungkinkan)
+if ($role === 'admin') {
+    // Tidak bisa reverse hash password, jadi bisa diisi placeholder atau info
+    $plain_password = '[TERENKRIPSI]'; // Atau beri tahu tidak bisa ditampilkan
+}
+
+// Proses form (hanya jika bukan admin)
+if ($_SERVER["REQUEST_METHOD"] == "POST" && $role !== 'admin') {
     $password = $_POST['password'];
     $confirm = $_POST['confirm_password'];
 
@@ -29,7 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif ($password !== $confirm) {
         $error = "Password dan konfirmasi tidak cocok.";
     } else {
-        // Enkripsi password
         $hashed = password_hash($password, PASSWORD_DEFAULT);
         $update = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
         $update->bind_param("si", $hashed, $user_id);
@@ -84,16 +91,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="email" class="form-label">Email Anda</label>
             <input type="email" id="email" class="form-control" value="<?= htmlspecialchars($email) ?>" disabled>
         </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password Baru</label>
-            <input type="password" name="password" id="password" class="form-control" placeholder="Masukkan password baru" required>
-        </div>
-        <div class="mb-3">
-            <label for="confirm_password" class="form-label">Konfirmasi Password</label>
-            <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Ulangi password baru" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-        <a href="dashboard.php" class="btn btn-secondary">Kembali</a>
+
+        <?php if ($role === 'admin'): ?>
+            <div class="mb-3">
+                <label class="form-label">Password (Admin tidak dapat mengubah)</label>
+                <input type="text" class="form-control" value="<?= $plain_password ?>" readonly>
+            </div>
+            <div class="alert alert-warning">Admin tidak diizinkan untuk mengubah password.</div>
+            <a href="dashboard.php" class="btn btn-secondary">Kembali</a>
+        <?php else: ?>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password Baru</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Masukkan password baru" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirm_password" class="form-label">Konfirmasi Password</label>
+                <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Ulangi password baru" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            <a href="dashboard_superadmin.php" class="btn btn-secondary">Kembali</a>
+        <?php endif; ?>
     </form>
 </div>
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -12,8 +12,6 @@ import Footer from "../pageSection/footer.jsx";
 const MainEvents = () => {
   const [events, setEvents] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
 
   useEffect(() => {
     axios
@@ -61,79 +59,74 @@ const MainEvents = () => {
           </p>
         </motion.div>
 
-        {/* Tampilan Mobile: Carousel */}
+        {/* Mobile View: Carousel */}
         <div className="md:hidden px-4 pb-20 relative">
-          <div className="relative">
-            <div
-              ref={prevRef}
-              className="absolute top-1/2 left-2 z-50 w-10 h-10 bg-[#861B58] text-white rounded-full flex items-center justify-center shadow-lg cursor-pointer transition-transform duration-300 hover:scale-110 hover:bg-[#6c1646]"
-              style={{ transform: "translateY(-50%)" }}
-            >
-              &#8592;
-            </div>
-            <div
-              ref={nextRef}
-              className="absolute top-1/2 right-2 z-50 w-10 h-10 bg-[#861B58] text-white rounded-full flex items-center justify-center shadow-lg cursor-pointer transition-transform duration-300 hover:scale-110 hover:bg-[#6c1646]"
-              style={{ transform: "translateY(-50%)" }}
-            >
-              &#8594;
-            </div>
+          <Swiper
+            spaceBetween={16}
+            slidesPerView={1}
+            pagination={{ clickable: true }}
+            navigation={true}
+            modules={[Pagination, Navigation]}
+            className="relative"
+          >
+            {events.map((event, idx) => (
+              <SwiperSlide key={event.id}>
+                <motion.div
+                  className="relative h-[320px] rounded-xl overflow-hidden shadow-xl group cursor-pointer"
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: idx * 0.1 }}
+                  viewport={{ once: true }}
+                  onClick={() => openModal(idx)}
+                >
+                  <img
+                    src={`http://localhost/WEBSITEHIMPUNAN/backend/${event.image}`}
+                    alt={event.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+                  <div className="absolute bottom-5 left-5 right-5 text-white z-10">
+                    <h3 className="text-xl font-bold">{event.title}</h3>
+                    <p className="text-sm mt-1">{event.description}</p>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/50">
+                    <span className="text-white text-lg font-semibold bg-[#861B58] px-4 py-2 rounded-full shadow-lg">
+                      Lihat Detail
+                    </span>
+                  </div>
+                </motion.div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
 
-            <Swiper
-              spaceBetween={16}
-              slidesPerView={1}
-              pagination={{ clickable: true }}
-              navigation={{
-                prevEl: prevRef.current,
-                nextEl: nextRef.current,
-              }}
-              onBeforeInit={(swiper) => {
-                swiper.params.navigation.prevEl = prevRef.current;
-                swiper.params.navigation.nextEl = nextRef.current;
-              }}
-              modules={[Pagination, Navigation]}
-              className="relative"
-            >
-              {events.map((event, idx) => (
-                <SwiperSlide key={event.id}>
-                  <motion.div
-                    className="relative h-[320px] rounded-xl overflow-hidden shadow-xl"
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: idx * 0.1 }}
-                    viewport={{ once: true }}
-                    onClick={() => openModal(idx)}
-                  >
-                    <img
-                      src={`http://localhost/WEBSITEHIMPUNAN/backend/${event.image}`}
-                      alt={event.title}
-                      className="w-full h-full object-cover cursor-pointer"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
-                    <div className="absolute bottom-5 left-5 right-5 text-white z-10">
-                      <h3 className="text-xl font-bold">{event.title}</h3>
-                      <p className="text-sm mt-1">{event.description}</p>
-                    </div>
-                  </motion.div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-
-            <style jsx>{`
-              :global(.swiper-pagination-bullet) {
-                background-color: #c4c4c4;
-                opacity: 1;
-                margin: 0 6px !important;
-              }
-
-              :global(.swiper-pagination-bullet-active) {
-                background-color: #861B58;
-              }
-            `}</style>
-          </div>
+          <style jsx>{`
+            :global(.swiper-button-prev),
+            :global(.swiper-button-next) {
+              color: #861B58;
+              top: 40%;
+              width: 36px;
+              height: 36px;
+              background-color: white;
+              border-radius: 9999px;
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            :global(.swiper-button-prev::after),
+            :global(.swiper-button-next::after) {
+              font-size: 16px;
+              font-weight: bold;
+            }
+            :global(.swiper-pagination-bullet) {
+              background-color: #c4c4c4;
+              opacity: 1;
+              margin: 0 6px !important;
+            }
+            :global(.swiper-pagination-bullet-active) {
+              background-color: #861B58;
+            }
+          `}</style>
         </div>
 
-        {/* Tampilan Desktop: Grid */}
+        {/* Desktop View: Grid */}
         <div className="hidden md:grid max-w-6xl mx-auto px-6 grid-cols-2 lg:grid-cols-3 gap-8 pb-20">
           {events.map((event, idx) => (
             <motion.div
@@ -154,6 +147,11 @@ const MainEvents = () => {
               <div className="absolute bottom-5 left-5 right-5 text-white z-10">
                 <h3 className="text-xl font-semibold">{event.title}</h3>
                 <p className="text-sm mt-1">{event.description}</p>
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/50">
+                <span className="text-white text-lg font-semibold bg-[#861B58] px-4 py-2 rounded-full shadow-lg">
+                  Lihat Detail
+                </span>
               </div>
             </motion.div>
           ))}
@@ -182,8 +180,6 @@ const MainEvents = () => {
                 </h3>
                 <p className="text-gray-700">{events[selectedIndex].description}</p>
               </div>
-
-              {/* Left and Right navigation */}
               <button
                 onClick={goToPrevious}
                 className="absolute top-1/2 left-3 transform -translate-y-1/2 bg-[#861B58] text-white w-10 h-10 rounded-full shadow-md hover:bg-[#6c1646]"

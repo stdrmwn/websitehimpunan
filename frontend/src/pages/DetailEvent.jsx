@@ -1,3 +1,4 @@
+import { CalendarDays } from "lucide-react"; // Gunakan lucide-react untuk icon kalender
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import NavbarWhite from "../pageSection/NavbarWhite.jsx";
@@ -57,7 +58,7 @@ const DetailEvents = () => {
       <main className="flex-grow pt-28 px-4 md:px-16 lg:px-24 pb-16 text-black">
         <div className="max-w-5xl mx-auto">
           <div className="text-sm text-gray-600 mb-4">
-            <Link to="/event" className="hover:underline text-[#7A1E5D] font-medium">
+            <Link to="/eventshimpunan" className="hover:underline text-[#7A1E5D] font-medium">
               Event
             </Link>{" "}
             &gt;{" "}
@@ -68,12 +69,22 @@ const DetailEvents = () => {
 
           {event.foto_event && (
             <>
-              <img
-                src={`http://localhost/WEBSITEHIMPUNAN/backend/uploads/${event.foto_event}`}
-                alt={event.nama_event}
+              <div
+                className="relative group w-full h-64 md:h-80 mb-6 rounded-xl overflow-hidden shadow-lg cursor-pointer"
                 onClick={() => setShowImageModal(true)}
-                className="w-full h-64 md:h-80 object-cover rounded-xl mb-6 shadow-lg cursor-pointer hover:opacity-90 transition"
-              />
+              >
+                <img
+                  src={`http://localhost/WEBSITEHIMPUNAN/backend/uploads/${event.foto_event}`}
+                  alt={event.nama_event}
+                  className="w-full h-full object-cover group-hover:opacity-80 transition duration-300"
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-40 transition duration-300">
+                  <span className="text-white text-lg font-semibold opacity-0 group-hover:opacity-100 transition duration-300">
+                    Klik untuk perbesar
+                  </span>
+                </div>
+              </div>
+
               {showImageModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center">
                   <div className="relative max-w-4xl w-full mx-4">
@@ -100,16 +111,20 @@ const DetailEvents = () => {
             </span>
           )}
 
-          <h1 className="text-3xl font-bold text-[#7A1E5D] mb-2">
+          <h1 className="text-3xl font-bold text-[#7A1E5D] mb-3">
             {event.nama_event}
           </h1>
-          <p className="text-sm text-gray-500 mb-6">
-            {new Date(event.tanggal_input).toLocaleDateString("id-ID", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            })}
-          </p>
+
+          <div className="flex items-center text-sm text-gray-600 mb-6">
+            <span className="inline-flex items-center gap-1 bg-[#f3f3f3] text-[#7A1E5D] font-medium px-3 py-1 rounded-full">
+              <CalendarDays className="w-4 h-4" />
+              {new Date(event.tanggal_input).toLocaleDateString("id-ID", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}
+            </span>
+          </div>
 
           <div
             className="text-gray-800 leading-relaxed"

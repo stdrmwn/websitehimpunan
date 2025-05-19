@@ -9,6 +9,7 @@ export default function AchievementStats() {
   const [achievements, setAchievements] = useState([]);
   const [informasi, setInformasi] = useState([]);
   const [eventList, setEventList] = useState([]);
+  const [modalImage, setModalImage] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,12 +25,12 @@ export default function AchievementStats() {
 
     axios
       .get("http://localhost/WEBSITEHIMPUNAN/backend/get_artikell.php")
-      .then((res) => setInformasi(res.data.slice(0, 4)))
+      .then((res) => setInformasi(res.data.slice(0, 6)))
       .catch((err) => console.error("Gagal fetch informasi:", err));
 
     axios
       .get("http://localhost/WEBSITEHIMPUNAN/backend/get_eventshimpunan.php")
-      .then((res) => setEventList(res.data.slice(0, 3))) // ambil 3 event terbaru
+      .then((res) => setEventList(res.data.slice(0, 3)))
       .catch((err) => console.error("Gagal fetch event:", err));
   }, []);
 
@@ -73,6 +74,15 @@ export default function AchievementStats() {
               </motion.div>
             ))}
           </div>
+
+          <div className="text-center mb-12">
+  <h2 className="text-3xl md:text-4xl font-bold text-[#800040]">
+    Kabinet Saat Ini
+  </h2>
+  <p className="text-lg text-gray-700 mt-3 mb-6">
+    Simbol dan filosofi dari kepengurusan HIMSI Universitas Pradita saat ini.
+  </p>
+</div>
 
           {kabinet?.logo ? (
             <motion.img
@@ -126,57 +136,129 @@ export default function AchievementStats() {
         </div>
       </motion.div>
 
-      {/* Section Event Himpunan */}
-      <motion.div
-        className="bg-white py-20 px-[8%]"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 1 }}
-      >
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-[#800040]">
-          Event Himpunan
-        </h2>
-        <p className="text-lg text-gray-700 mt-3 text-center mb-6">
-          Berbagai Kegiatan Menarik dari Himpunan Mahasiswa
-        </p>
+{/* Section Event Himpunan */}
+<motion.div
+  className="bg-white py-20 px-[8%]"
+  initial={{ opacity: 0 }}
+  whileInView={{ opacity: 1 }}
+  viewport={{ once: true, amount: 0.3 }}
+  transition={{ duration: 1 }}
+>
+  <h2 className="text-3xl md:text-4xl font-bold text-center text-[#800040]">
+    Event Himpunan
+  </h2>
+  <p className="text-lg text-gray-600 mt-3 text-center mb-10 max-w-2xl mx-auto">
+    Ikuti beragam kegiatan menarik yang diselenggarakan oleh Himpunan Mahasiswa kami.
+  </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {eventList.map((item, index) => (
-            <motion.div
-              key={index}
-              className="group bg-white rounded-xl shadow-lg overflow-hidden flex flex-col cursor-pointer transition-transform transform hover:scale-[1.03] hover:shadow-xl"
-              onClick={() => navigate(`/events/${item.slug}`)}
-              whileHover={{ y: -5 }}
-              transition={{ duration: 0.3 }}
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 max-w-7xl mx-auto">
+    {eventList.map((item, index) => (
+      <motion.div
+        key={index}
+        className="group bg-white rounded-2xl shadow-md hover:shadow-2xl border border-gray-200 hover:border-[#800040] transition-all duration-300 overflow-hidden flex flex-col relative cursor-pointer"
+        whileHover={{ y: -4 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="relative">
+          {item.foto_event && (
+            <div
+              className="relative group"
+              onClick={() =>
+                setModalImage(`http://localhost/WEBSITEHIMPUNAN/backend/uploads/${item.foto_event}`)
+              }
             >
-              {item.foto_event && (
-                <img
-                  src={`http://localhost/WEBSITEHIMPUNAN/backend/uploads/${item.foto_event}`}
-                  alt={item.nama_event}
-                  className="h-48 w-full object-cover"
-                />
-              )}
-              <div className="p-5 flex-grow flex flex-col">
-                <h3 className="text-xl font-bold mb-2 text-[#7A2048]">
-                  {item.nama_event}
-                </h3>
-                <div
-                  className="text-gray-700 text-sm flex-grow"
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      item.deskripsi_event.length > 120
-                        ? item.deskripsi_event.substring(0, 120) + "..."
-                        : item.deskripsi_event,
-                  }}
-                />
-                <p className="text-xs text-gray-500 mt-2">
-                  {new Date(item.tanggal_event).toLocaleDateString("id-ID")}
-                </p>
+              <img
+                src={`http://localhost/WEBSITEHIMPUNAN/backend/uploads/${item.foto_event}`}
+                alt={item.nama_event}
+                className="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white font-semibold text-sm">
+                Lihat Detail
               </div>
-            </motion.div>
-          ))}
+            </div>
+          )}
+          <div className="absolute top-3 right-3 bg-[#800040] text-white text-xs px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            {new Date(item.tanggal_event).toLocaleDateString("id-ID", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}
+          </div>
         </div>
+
+        <div className="p-5 flex flex-col flex-grow" onClick={() => navigate(`/events/${item.slug}`)}>
+          <h3 className="text-lg md:text-xl font-semibold text-[#7A2048] mb-2">
+            {item.nama_event}
+          </h3>
+          <div
+            className="text-gray-700 text-sm mb-4 flex-grow"
+            dangerouslySetInnerHTML={{
+              __html:
+                item.deskripsi_event.length > 120
+                  ? item.deskripsi_event.substring(0, 120) + "..."
+                  : item.deskripsi_event,
+            }}
+          />
+          <div className="mt-auto flex justify-end">
+            <span className="text-[#800040] text-sm font-semibold group-hover:underline">
+              Selengkapnya →
+            </span>
+          </div>
+        </div>
+      </motion.div>
+    ))}
+  </div>
+
+  {/* Modal Foto Detail */}
+  {modalImage && (
+    <div
+      className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+      onClick={() => setModalImage(null)}
+    >
+      <div
+        className="relative max-w-full max-h-screen"
+        onClick={(e) => e.stopPropagation()} // supaya klik di dalam modal gak close
+      >
+        {/* Tombol Close */}
+        <button
+          onClick={() => setModalImage(null)}
+          className="absolute top-3 right-3 text-white bg-black bg-opacity-50 rounded-full p-2 hover:bg-opacity-80 transition"
+          aria-label="Close modal"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <img
+          src={modalImage}
+          alt="Detail Event"
+          className="max-w-full max-h-screen object-contain rounded-lg"
+        />
+      </div>
+    </div>
+  )}
 
         <div className="flex justify-center mt-12">
           <button
@@ -188,54 +270,78 @@ export default function AchievementStats() {
         </div>
       </motion.div>
 
-      {/* Informasi Himpunan */}
-      <motion.div
-        className="bg-white py-20 px-[8%]"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 1 }}
-      >
-        <h2 className="text-3xl md:text-4xl font-bold text-center">
-          <span className="text-[#800040]">Informasi </span>
-          <span className="text-[#800040]">Himpunan</span>
-        </h2>
-        <p className="text-lg text-gray-700 mt-3 text-center mb-6">
-          Informasi Terkini Seputar Himpunan Mahasiswa
-        </p>
+ {/* Informasi Himpunan */}
+<motion.div
+  className="bg-gradient-to-b from-white to-gray-50 py-20 px-[8%]"
+  initial={{ opacity: 0 }}
+  whileInView={{ opacity: 1 }}
+  viewport={{ once: true, amount: 0.3 }}
+  transition={{ duration: 1 }}
+>
+  <h2 className="text-3xl md:text-4xl font-extrabold text-center text-[#800040] tracking-tight">
+    Informasi Himpunan
+  </h2>
+  <p className="text-lg text-gray-600 mt-3 text-center mb-10 max-w-2xl mx-auto">
+    Dapatkan informasi terbaru seputar kegiatan dan kabar dari Himpunan Mahasiswa.
+  </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {informasi.map((item, index) => (
-            <motion.div
-              key={index}
-              className="group bg-white rounded-xl shadow-lg overflow-hidden flex flex-col cursor-pointer transition-transform transform hover:scale-[1.03] hover:shadow-xl relative"
-              onClick={() => navigate(`/informasi/${item.slug}`)}
-              whileHover={{ y: -5 }}
-              transition={{ duration: 0.3 }}
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
+    {informasi.map((item, index) => (
+      <motion.div
+        key={index}
+        className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer relative border border-gray-100 hover:border-[#800040]/40"
+        onClick={() => navigate(`/informasi/${item.slug}`)}
+        whileHover={{ y: -4 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="p-6 flex flex-col h-full">
+          {/* Badge tanggal */}
+          <div className="flex items-center gap-2 mb-3 text-xs font-medium text-[#800040] bg-[#800040]/10 px-3 py-1 rounded-full w-fit">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 text-[#800040]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              <div className="p-5 flex-grow flex flex-col">
-                <h3 className="text-xl font-bold mb-2 text-[#7A2048]">
-                  {item.judul}
-                </h3>
-                <div
-                  className="text-gray-700 text-sm flex-grow"
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      item.informasi.length > 120
-                        ? item.informasi.substring(0, 120) + "..."
-                        : item.informasi,
-                  }}
-                />
-                <p className="text-xs text-gray-500 mt-2">
-                  {new Date(item.tanggal_input).toLocaleDateString("id-ID")}
-                </p>
-              </div>
-              <div className="absolute bottom-3 right-3 text-[#800040] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                ➜
-              </div>
-            </motion.div>
-          ))}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            {new Date(item.tanggal_input).toLocaleDateString("id-ID", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </div>
+
+          <h3 className="text-lg md:text-xl font-semibold text-[#7A2048] mb-2 group-hover:text-[#800040] transition-colors duration-300 line-clamp-2">
+            {item.judul}
+          </h3>
+
+          <div
+            className="text-gray-600 text-sm leading-relaxed mb-4 flex-grow line-clamp-4"
+            dangerouslySetInnerHTML={{
+              __html:
+                item.informasi.length > 120
+                  ? item.informasi.substring(0, 120) + "..."
+                  : item.informasi,
+            }}
+          />
+
+          <div className="flex items-center justify-between mt-auto pt-2">
+            <div className="text-[#800040] text-sm font-medium flex items-center gap-1">
+              Selengkapnya
+              <span className="text-lg">➜</span>
+            </div>
+          </div>
         </div>
+      </motion.div>
+    ))}
+  </div>
 
         <div className="flex justify-center mt-12">
           <button

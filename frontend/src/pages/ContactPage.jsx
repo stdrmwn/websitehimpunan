@@ -104,48 +104,49 @@ const ContactPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-5xl font-bold tracking-tight text-[#861B58]">Contact Us</h1>
+          <h1 className="text-4xl font-bold text-[#861B58] mb-4">Contact Us</h1>
           <p className="text-lg mt-4 text-gray-700">
             Hubungi kami untuk kolaborasi, pertanyaan, atau informasi lainnya melalui platform di bawah ini.
           </p>
         </motion.div>
 
-        {/* Sosial Media */}
-        <motion.div
-          className="bg-[#800040] rounded-2xl p-6 flex flex-wrap justify-center gap-4 text-white shadow-lg"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          {[{
-            icon: <FaInstagram className="text-pink-600 text-2xl" />,
-            text: "@himsi.pradita",
-            link: "https://www.instagram.com/himsi.pradita",
-          }, {
-            icon: <FaLinkedin className="text-blue-700 text-2xl" />,
-            text: "@himsi.pradita",
-            link: "https://www.linkedin.com/in/himsi-pradita",
-          }, {
-            icon: <FaWhatsapp className="text-green-500 text-2xl" />,
-            text: "@himsi.pradita",
-            link: "https://wa.me/6285933235262?text=Hai,%20saya%20mau%20bertanya%20terkait%20himpunan.",
-          }, {
-            icon: <FaYoutube className="text-red-600 text-2xl" />,
-            text: "@himsi.pradita",
-            link: "https://youtube.com/@himsipradita?si=JpvMC_Dth5PyD7zY",
-          }].map((item, index) => (
-            <a
-              key={index}
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 bg-white text-black px-5 py-3 rounded-lg shadow-md transition transform hover:scale-105 hover:shadow-xl"
-            >
-              {item.icon}
-              <span className="font-semibold">{item.text}</span>
-            </a>
-          ))}
-        </motion.div>
+ {/* Sosial Media */}
+<motion.div
+  className="bg-[#800040] p-6 flex flex-wrap justify-center gap-4 text-white shadow-lg" // Hapus 'rounded-2xl'
+  initial={{ opacity: 0, scale: 0.95 }}
+  animate={{ opacity: 1, scale: 1 }}
+  transition={{ duration: 0.6, delay: 0.2 }}
+>
+  {[{
+    icon: <FaInstagram className="text-pink-600 text-2xl" />,
+    text: "@himsi.pradita",
+    link: "https://www.instagram.com/himsi.pradita",
+  }, {
+    icon: <FaLinkedin className="text-blue-700 text-2xl" />,
+    text: "@himsi.pradita",
+    link: "https://www.linkedin.com/in/himsi-pradita",
+  }, {
+    icon: <FaWhatsapp className="text-green-500 text-2xl" />,
+    text: "@himsi.pradita",
+    link: "https://wa.me/6285933235262?text=Hai,%20saya%20mau%20bertanya%20terkait%20himpunan.",
+  }, {
+    icon: <FaYoutube className="text-red-600 text-2xl" />,
+    text: "@himsi.pradita",
+    link: "https://youtube.com/@himsipradita?si=JpvMC_Dth5PyD7zY",
+  }].map((item, index) => (
+    <a
+      key={index}
+      href={item.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 bg-white text-black px-5 py-3 rounded-lg shadow-md transition transform hover:scale-105 hover:shadow-xl"
+    >
+      {item.icon}
+      <span className="font-semibold">{item.text}</span>
+    </a>
+  ))}
+</motion.div>
+
 
         {/* Media Partner */}
         <motion.div

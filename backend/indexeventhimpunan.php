@@ -158,8 +158,26 @@ $totalPages = ceil($totalRow['total'] / $limit);
   <meta charset="UTF-8">
   <title>Events Himpunan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@6.8.3/tinymce.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <script>
+    tinymce.init({
+      selector: 'textarea.rich-text',
+      height: 400,
+      menubar: false,
+      plugins: ['link', 'textcolor', 'lists', 'code', 'fullscreen', 'preview', 'wordcount'],
+      toolbar: 'undo redo | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | link unlink | removeformat | code fullscreen preview',
+      toolbar_mode: 'sliding',
+      branding: false,
+      content_style: 'body { font-family:Arial,sans-serif; font-size:14px }',
+      setup: function (editor) {
+        editor.on('change', function () {
+          editor.save();
+        });
+      }
+    });
+  </script>
   <style>
     body { font-family: 'Segoe UI', sans-serif; background-color: #f5f6fa; margin: 0; }
     .sidebar { height: 100vh; background-color: #800040; padding-top: 1rem; color: white; position: fixed; width: 240px; top: 0; left: 0; transition: 0.3s ease; z-index: 1050; }
@@ -205,31 +223,32 @@ $totalPages = ceil($totalRow['total'] / $limit);
   <a href="indexgallery.php"><i class="bi bi-images"></i> Gallery of Events</a>
   <a href="indexachievement.php"><i class="bi bi-award-fill"></i> Pencapaian</a>
   <a href="indexartikelfix.php"><i class="bi bi-journal-text"></i> Informasi Artikel</a>
+          <a href="inputhistory.php"><i class="bi bi-clock-history"></i> Our History</a>
   <a href="logout.php" style="color: #ff9999;"><i class="bi bi-box-arrow-right"></i> Logout</a>
 </div>
-  <!-- Main Content -->
-  <div class="content container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-      <h2 class="fw-bold mb-2">Daftar Events Himpunan</h2>
-      <button class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#addModal">+ Tambah Event</button>
-    </div>
+ <!-- Main Content -->
+<div class="content container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <h2 class="fw-bold mb-2">Daftar Events Himpunan</h2>
+    <button class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#addModal">+ Tambah Event</button>
+  </div>
 
-    <?php if ($result && mysqli_num_rows($result) > 0) { ?>
- <div class="table-responsive">
-  <table class="table table-bordered table-hover align-middle">
-    <thead class="table-dark">
-      <tr>
-        <th>Foto</th>
-        <th>Nama Event</th>
-        <th>Kategori Event</th> <!-- Tambahan kolom kategori -->
-        <th>Deskripsi</th>
-        <th>Tanggal</th>
-        <th>Link</th>
-        <th>Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+  <?php if ($result && mysqli_num_rows($result) > 0) { ?>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Foto</th>
+          <th>Nama Event</th>
+          <th>Kategori Event</th>
+          <th>Deskripsi</th>
+          <th>Tanggal</th>
+          <th>Link</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
         <tr>
           <td>
             <?php if ($row['foto_event']) { ?>
@@ -237,8 +256,11 @@ $totalPages = ceil($totalRow['total'] / $limit);
             <?php } else { echo "—"; } ?>
           </td>
           <td><?= htmlspecialchars($row['nama_event']) ?></td>
-          <td><?= htmlspecialchars($row['kategori_event']) ?></td> <!-- Tampilkan kategori -->
-          <td style="max-width: 300px; white-space: normal;"><?= nl2br(htmlspecialchars($row['deskripsi_event'])) ?></td>
+          <td><?= htmlspecialchars($row['kategori_event']) ?></td>
+<td style="max-width: 300px; white-space: pre-wrap;">
+  <?= nl2br(htmlspecialchars(strip_tags($row['deskripsi_event']))) ?>
+</td>
+
           <td><?= htmlspecialchars($row['tanggal_event']) ?></td>
           <td>
             <?php if ($row['link_terkait']) { ?>
@@ -278,7 +300,7 @@ $totalPages = ceil($totalRow['total'] / $limit);
           </div>
           <div class="mb-3">
             <label for="deskripsi_event_<?= $row['id'] ?>" class="form-label">Deskripsi</label>
-            <textarea id="deskripsi_event_<?= $row['id'] ?>" name="deskripsi_event" class="form-control" rows="5" required><?= htmlspecialchars($row['deskripsi_event']) ?></textarea>
+            <textarea id="deskripsi_event_<?= $row['id'] ?>" name="deskripsi_event" class="form-control rich-text" rows="5" required><?= htmlspecialchars($row['deskripsi_event']) ?></textarea>
           </div>
           <div class="mb-3">
             <label for="tanggal_event_<?= $row['id'] ?>" class="form-label">Tanggal</label>
@@ -311,7 +333,6 @@ $totalPages = ceil($totalRow['total'] / $limit);
     </div>
   </div>
 </div>
-
 
 
               <!-- Modal Konfirmasi Hapus -->
@@ -359,7 +380,7 @@ $totalPages = ceil($totalRow['total'] / $limit);
         </div>
         <div class="mb-3">
           <label>Deskripsi</label>
-          <textarea name="deskripsi_event" class="form-control" rows="5" required></textarea>
+          <textarea name="deskripsi_event" class="form-control rich-text" rows="5" required></textarea>
         </div>
         <div class="mb-3">
           <label>Tanggal</label>
